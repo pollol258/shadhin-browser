@@ -73,6 +73,7 @@ pub struct TabUiItem {
     pub https_fallback_url: RefCell<Option<String>>,
 }
 
+#[derive(Clone)]
 pub struct ShadhinWindow {
     window: adw::ApplicationWindow,
     split_view: adw::OverlaySplitView,
@@ -414,6 +415,7 @@ impl ShadhinWindow {
 
         win.setup_signals();
         win.setup_shortcuts();
+        win.setup_actions();
 
         if persistence_allowed {
             let storage_clean = win.storage.clone();
@@ -2719,8 +2721,273 @@ impl ShadhinWindow {
         self.window.add_controller(key_controller);
     }
 
+    /// Sets up window-level GActions and populates the Application Menu
+    fn setup_actions(&self) {
+        // 1. New Tab (win.new-tab)
+        let ts_action = self.tab_strip.clone();
+        let act_new_tab = gio::SimpleAction::new("new-tab", None);
+        act_new_tab.connect_activate(move |_, _| {
+            ts_action.trigger_new_tab(None);
+        });
+        self.window.add_action(&act_new_tab);
+
+        // 2. Reopen Closed Tab (win.reopen-tab)
+        let tm_action = self.tab_manager.clone();
+        let ts_action = self.tab_strip.clone();
+        let act_reopen = gio::SimpleAction::new("reopen-tab", None);
+        act_reopen.connect_activate(move |_, _| {
+            let mut tm = tm_action.borrow_mut();
+            if let Some(info) = tm.pop_closed_tab() {
+                drop(tm);
+                ts_action.trigger_new_tab(Some(info.url));
+            }
+        });
+        self.window.add_action(&act_reopen);
+
+        // 3. Bookmarks Manager (win.bookmarks)
+        let tv_action = self.tab_view.clone();
+        let items_action = self.tab_items.clone();
+        let tb_action = self.toolbar.clone();
+        let act_bookmarks = gio::SimpleAction::new("bookmarks", None);
+        act_bookmarks.connect_activate(move |_, _| {
+            if let Some(page) = tv_action.selected_page() {
+                let idx = tv_action.page_position(&page) as usize;
+                let items = items_action.borrow();
+                if let Some(item) = items.get(idx) {
+                    item.bookmarks_panel.refresh("");
+                    item.stack.set_visible_child_name("bookmarks");
+                    tb_action.address_bar().set_text("about:bookmarks");
+                    tb_action.address_bar().set_security_state(true);
+                }
+            }
+        });
+        self.window.add_action(&act_bookmarks);
+
+        // 4. Browsing History (win.history)
+        let tv_action = self.tab_view.clone();
+        let items_action = self.tab_items.clone();
+        let tb_action = self.toolbar.clone();
+        let act_history = gio::SimpleAction::new("history", None);
+        act_history.connect_activate(move |_, _| {
+            if let Some(page) = tv_action.selected_page() {
+                let idx = tv_action.page_position(&page) as usize;
+                let items = items_action.borrow();
+                if let Some(item) = items.get(idx) {
+                    item.history_panel.refresh("");
+                    item.stack.set_visible_child_name("history");
+                    tb_action.address_bar().set_text("about:history");
+                    tb_action.address_bar().set_security_state(true);
+                }
+            }
+        });
+        self.window.add_action(&act_history);
+
+        // 5. Downloads (win.downloads)
+        let tv_action = self.tab_view.clone();
+        let items_action = self.tab_items.clone();
+        let tb_action = self.toolbar.clone();
+        let act_downloads = gio::SimpleAction::new("downloads", None);
+        act_downloads.connect_activate(move |_, _| {
+            if let Some(page) = tv_action.selected_page() {
+                let idx = tv_action.page_position(&page) as usize;
+                let items = items_action.borrow();
+                if let Some(item) = items.get(idx) {
+                    item.downloads_panel.refresh("");
+                    item.stack.set_visible_child_name("downloads");
+                    tb_action.address_bar().set_text("about:downloads");
+                    tb_action.address_bar().set_security_state(true);
+                }
+            }
+        });
+        self.window.add_action(&act_downloads);
+
+        // 6. Zoom In (win.zoom-in)
+        let tv_action = self.tab_view.clone();
+        let items_action = self.tab_items.clone();
+        let act_zoom_in = gio::SimpleAction::new("zoom-in", None);
+        act_zoom_in.connect_activate(move |_, _| {
+            if let Some(page) = tv_action.selected_page() {
+                let idx = tv_action.page_position(&page) as usize;
+                let items = items_action.borrow();
+                if let Some(item) = items.get(idx)
+                    && let Some(ref wv) = *item.webview.borrow()
+                {
+                    let new_zoom = (wv.zoom_level() + 0.1).min(5.0);
+                    wv.set_zoom_level(new_zoom);
+                }
+            }
+        });
+        self.window.add_action(&act_zoom_in);
+
+        // 7. Zoom Out (win.zoom-out)
+        let tv_action = self.tab_view.clone();
+        let items_action = self.tab_items.clone();
+        let act_zoom_out = gio::SimpleAction::new("zoom-out", None);
+        act_zoom_out.connect_activate(move |_, _| {
+            if let Some(page) = tv_action.selected_page() {
+                let idx = tv_action.page_position(&page) as usize;
+                let items = items_action.borrow();
+                if let Some(item) = items.get(idx)
+                    && let Some(ref wv) = *item.webview.borrow()
+                {
+                    let new_zoom = (wv.zoom_level() - 0.1).max(0.25);
+                    wv.set_zoom_level(new_zoom);
+                }
+            }
+        });
+        self.window.add_action(&act_zoom_out);
+
+        // 8. Normal Zoom (win.zoom-reset)
+        let tv_action = self.tab_view.clone();
+        let items_action = self.tab_items.clone();
+        let act_zoom_reset = gio::SimpleAction::new("zoom-reset", None);
+        act_zoom_reset.connect_activate(move |_, _| {
+            if let Some(page) = tv_action.selected_page() {
+                let idx = tv_action.page_position(&page) as usize;
+                let items = items_action.borrow();
+                if let Some(item) = items.get(idx)
+                    && let Some(ref wv) = *item.webview.borrow()
+                {
+                    wv.set_zoom_level(1.0);
+                }
+            }
+        });
+        self.window.add_action(&act_zoom_reset);
+
+        // 9. Find in Page (win.find-in-page)
+        let fb_action = self.find_bar.clone();
+        let act_find = gio::SimpleAction::new("find-in-page", None);
+        act_find.connect_activate(move |_, _| {
+            fb_action.show_and_focus();
+        });
+        self.window.add_action(&act_find);
+
+        // 10. Clear Browsing Data (win.clear-browsing-data)
+        let win_action = self.window.clone();
+        let storage_action = self.storage.clone();
+        let session_action = self.active_network_session.clone();
+        let perm_action = self.persistence_allowed;
+        let act_clear = gio::SimpleAction::new("clear-browsing-data", None);
+        act_clear.connect_activate(move |_, _| {
+            crate::ui::clear_data::show_clear_browsing_data_dialog(
+                &win_action,
+                storage_action.clone(),
+                session_action.borrow().clone(),
+                perm_action,
+            );
+        });
+        self.window.add_action(&act_clear);
+
+        // 11. Preferences / Settings (win.settings)
+        let win_action = self.window.clone();
+        let cfg_action = self.config.clone();
+        let storage_action = self.storage.clone();
+        let session_action = self.active_network_session.clone();
+        let act_settings = gio::SimpleAction::new("settings", None);
+        act_settings.connect_activate(move |_, _| {
+            SettingsWindow::present(
+                Some(&win_action),
+                cfg_action.clone(),
+                storage_action.clone(),
+                Some(session_action.borrow().clone()),
+            );
+        });
+        self.window.add_action(&act_settings);
+
+        // 12. About Shadhin Browser (win.about)
+        let win_action = self.window.clone();
+        let act_about = gio::SimpleAction::new("about", None);
+        act_about.connect_activate(move |_, _| {
+            Self::show_about_dialog(&win_action);
+        });
+        self.window.add_action(&act_about);
+
+        // Build and set PopoverMenu model on the main menu button
+        let menu = Self::create_app_menu();
+        self.toolbar.set_menu_model(&menu);
+    }
+
+    /// Constructs the structured Gio Menu model for the Main Menu popover
+    fn create_app_menu() -> gio::Menu {
+        let menu = gio::Menu::new();
+
+        // Section 1: Windows & Tabs
+        let section_tabs = gio::Menu::new();
+        section_tabs.append(Some("New Tab"), Some("win.new-tab"));
+        section_tabs.append(Some("New Window"), Some("app.new-window"));
+        section_tabs.append(Some("New Private Window"), Some("app.new-private-window"));
+        section_tabs.append(Some("Reopen Closed Tab"), Some("win.reopen-tab"));
+        menu.append_section(None, &section_tabs);
+
+        // Section 2: Browser Views
+        let section_views = gio::Menu::new();
+        section_views.append(Some("Bookmarks"), Some("win.bookmarks"));
+        section_views.append(Some("History"), Some("win.history"));
+        section_views.append(Some("Downloads"), Some("win.downloads"));
+        menu.append_section(None, &section_views);
+
+        // Section 3: Page & Zoom
+        let section_page = gio::Menu::new();
+        let zoom_menu = gio::Menu::new();
+        zoom_menu.append(Some("Zoom In"), Some("win.zoom-in"));
+        zoom_menu.append(Some("Zoom Out"), Some("win.zoom-out"));
+        zoom_menu.append(Some("Reset Zoom"), Some("win.zoom-reset"));
+        section_page.append_submenu(Some("Zoom"), &zoom_menu);
+        section_page.append(Some("Find in Page…"), Some("win.find-in-page"));
+        menu.append_section(None, &section_page);
+
+        // Section 4: Tools & Settings
+        let section_tools = gio::Menu::new();
+        section_tools.append(
+            Some("Clear Browsing Data…"),
+            Some("win.clear-browsing-data"),
+        );
+        section_tools.append(Some("Preferences"), Some("win.settings"));
+        section_tools.append(Some("About Shadhin Browser"), Some("win.about"));
+        menu.append_section(None, &section_tools);
+
+        menu
+    }
+
+    /// Displays the Libadwaita About dialog
+    fn show_about_dialog(parent: &adw::ApplicationWindow) {
+        let about = adw::AboutWindow::builder()
+            .transient_for(parent)
+            .modal(true)
+            .application_name(crate::app::APP_NAME)
+            .version(crate::app::APP_VERSION)
+            .comments("Fast · Private · Open — Native Linux web browser")
+            .website("https://github.com/pollol258/shadhin-browser")
+            .issue_url("https://github.com/pollol258/shadhin-browser/issues")
+            .developer_name("Shadhin Browser Contributors")
+            .application_icon(crate::app::APP_ID)
+            .license_type(gtk4::License::Gpl30)
+            .build();
+        about.present();
+    }
+
     /// Presents the window on the display
     pub fn present(&self) {
         self.window.present();
+    }
+
+    /// Accessor to the underlying Libadwaita ApplicationWindow
+    pub fn window(&self) -> &adw::ApplicationWindow {
+        &self.window
+    }
+
+    /// Accessor to the toolbar
+    pub fn toolbar(&self) -> &ShadhinToolbar {
+        &self.toolbar
+    }
+
+    /// Accessor to the tab strip
+    pub fn tab_strip(&self) -> &ShadhinTabStrip {
+        &self.tab_strip
+    }
+
+    /// Accessor to the find bar
+    pub fn find_bar(&self) -> &FindBar {
+        &self.find_bar
     }
 }

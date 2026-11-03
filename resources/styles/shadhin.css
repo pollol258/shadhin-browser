@@ -170,7 +170,8 @@
   font-style: italic;
 }
 
-.shadhin-nav-btn {
+.shadhin-nav-btn,
+menubutton.shadhin-nav-btn > button {
   border-radius: 8px;
   padding: 6px 8px;
   background: transparent;
@@ -178,12 +179,14 @@
   transition: all 150ms ease;
 }
 
-.shadhin-nav-btn:hover {
+.shadhin-nav-btn:hover,
+menubutton.shadhin-nav-btn > button:hover {
   background: rgba(255, 255, 255, 0.16);
   color: #ffffff;
 }
 
-.shadhin-nav-btn:disabled {
+.shadhin-nav-btn:disabled,
+menubutton.shadhin-nav-btn > button:disabled {
   opacity: 0.35;
 }
 
@@ -284,16 +287,15 @@
 /* --- Compact Sidebar Mode (~56px Rail) --- */
 .shadhin-sidebar.compact {
   min-width: 56px;
-  max-width: 56px;
   padding: 12px 4px;
 }
 
 .shadhin-sidebar.compact .shadhin-sidebar-label {
-  display: none;
+  opacity: 0;
 }
 
 .shadhin-sidebar.compact .shadhin-sidebar-section-title {
-  display: none;
+  opacity: 0;
 }
 
 .shadhin-sidebar.compact .shadhin-sidebar-separator {
@@ -302,8 +304,7 @@
 
 .shadhin-sidebar.compact .shadhin-sidebar-item {
   padding: 8px 0;
-  justify-content: center;
-  margin: 2px auto;
+  margin: 2px 4px;
   min-width: 44px;
   min-height: 36px;
 }
