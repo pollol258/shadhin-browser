@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/shadhin/browser">
+    <file alias="styles/shadhin.css">styles/shadhin.css</file>
+    <file alias="icons/shadhin-logo.svg">icons/shadhin-logo.svg</file>
+  </gresource>
+</gresources>

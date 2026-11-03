@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.shadhin.browser</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Shadhin Browser</name>
+  <summary>Fast, private, and open native Linux web browser</summary>
+  <description>
+    <p>
+      Shadhin Browser (স্বাধীন ব্রাউজার; "Shadhin" means free/independent) is a high-performance,
+      privacy-respecting native Linux browser engineered with Rust, GTK4, Libadwaita, and WebKitGTK 6.0.
+    </p>
+    <p>Features include:</p>
+    <ul>
+      <li>Native Wayland and X11 rendering via GTK4 and Libadwaita</li>
+      <li>Hardware-accelerated WebKitGTK 6.0 engine with process isolation</li>
+      <li>Native tracker and ad-blocking using WebKitUserContentFilterStore</li>
+      <li>Customizable workspaces and glassmorphic UI matching modern GNOME aesthetics</li>
+      <li>Strict telemetry-free architecture and verified privacy metrics</li>
+    </ul>
+  </description>
+  <url type="homepage">https://github.com/placeholder-user/shadhin-browser</url>
+  <launchable type="desktop-id">com.shadhin.browser.desktop</launchable>
+  <provides>
+    <binary>shadhin-browser</binary>
+  </provides>
+  <categories>
+    <category>Network</category>
+    <category>WebBrowser</category>
+  </categories>
+  <developer id="com.shadhin.browser">
+    <name>Shadhin Browser Contributors</name>
+  </developer>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.1.0" date="2026-11-03">
+      <description>
+        <p>Initial release of Shadhin Browser (0.1.0):</p>
+        <ul>
+          <li>Native GTK4 and Libadwaita dark glassmorphism user interface.</li>
+          <li>Real WebKitGTK 6.0 multi-process web browsing engine.</li>
+          <li>Native content filtering (EasyList and EasyPrivacy rules).</li>
+          <li>Bookmark management with Netscape HTML and JSON import/export.</li>
+          <li>Isolated workspaces and session crash recovery.</li>
+          <li>Verified file permissions and zero-telemetry architecture.</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+</component>

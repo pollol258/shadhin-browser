@@ -1,0 +1,22 @@
+[Desktop Entry]
+Name=Shadhin Browser
+GenericName=Web Browser
+Comment=Fast, private, and open native Linux web browser
+Exec=shadhin-browser %U
+Terminal=false
+Type=Application
+Icon=com.shadhin.browser
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/rss+xml;application/rdf+xml;x-scheme-handler/http;x-scheme-handler/https;
+StartupNotify=true
+StartupWMClass=com.shadhin.browser
+Keywords=Internet;Browser;Web;Privacy;AdBlock;
+Actions=new-window;new-private-window;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=shadhin-browser --new-window
+
+[Desktop Action new-private-window]
+Name=New Private Window
+Exec=shadhin-browser --private-window

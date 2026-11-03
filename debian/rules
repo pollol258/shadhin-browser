@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	cargo build --release --locked
+
+override_dh_auto_install:
+	install -D -m 0755 target/release/shadhin-browser debian/shadhin-browser/usr/bin/shadhin-browser
+	install -D -m 0644 data/com.shadhin.browser.desktop debian/shadhin-browser/usr/share/applications/com.shadhin.browser.desktop
+	ln -sf com.shadhin.browser.desktop debian/shadhin-browser/usr/share/applications/shadhin-browser.desktop
+	install -D -m 0644 data/com.shadhin.browser.metainfo.xml debian/shadhin-browser/usr/share/metainfo/com.shadhin.browser.metainfo.xml
+	./scripts/make-icons.sh
+	mkdir -p debian/shadhin-browser/usr/share/icons/hicolor
+	cp -r data/icons/hicolor/* debian/shadhin-browser/usr/share/icons/hicolor/

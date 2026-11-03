@@ -1,0 +1,36 @@
+Source: shadhin-browser
+Section: web
+Priority: optional
+Maintainer: Shadhin Browser Contributors <placeholder@example.com>
+Build-Depends: debhelper-compat (= 13),
+               cargo,
+               rustc,
+               libgtk-4-dev,
+               libadwaita-1-dev,
+               libwebkitgtk-6.0-dev,
+               libsqlite3-dev
+Standards-Version: 4.6.2
+Homepage: https://github.com/placeholder-user/shadhin-browser
+Rules-Requires-Root: no
+
+Package: shadhin-browser
+Architecture: amd64
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         bubblewrap,
+         xdg-utils,
+         shared-mime-info,
+         ca-certificates,
+         hicolor-icon-theme
+Recommends: fonts-noto-core,
+            fonts-noto-bengali
+Description: Fast, private, and open native Linux web browser
+ Shadhin Browser (স্বাধীন ব্রাউজার) is a fast, privacy-respecting native
+ Linux web browser built with Rust, GTK4, Libadwaita, and WebKitGTK 6.0.
+ .
+ Features:
+  * Native Wayland and X11 rendering via GTK4 and Libadwaita.
+  * Real multi-process WebKitGTK 6.0 engine with bubblewrap sandboxing.
+  * Native tracker and ad-blocking using WebKitUserContentFilterStore.
+  * Isolated workspaces with dedicated cookie and cache compartmentalization.
+  * Strict telemetry-free architecture and verified privacy metrics.

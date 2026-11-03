@@ -1,0 +1,45 @@
+.TH SHADHIN-BROWSER 1 "November 2026" "0.1.0" "User Commands"
+.SH NAME
+shadhin-browser \- Fast, private, and open native Linux web browser
+.SH SYNOPSIS
+.B shadhin-browser
+[\fIOPTIONS\fR] [\fIURL\fR...]
+.SH DESCRIPTION
+\fBShadhin Browser\fR (স্বাধীন ব্রাউজার) is a native Linux web browser built with
+Rust, GTK4, Libadwaita, and WebKitGTK 6.0. It features hardware-accelerated
+multi-process rendering, native content filtering, isolated workspaces,
+and a glassmorphism theme designed for GNOME and Linux desktops.
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Print a summary of available command-line options and exit.
+.TP
+.BR \-v ", " \-\-version
+Print the software version and exit.
+.TP
+.B \-\-new\-window
+Open a new browser window in the active or a new instance.
+.TP
+.B \-\-private\-window
+Open a new ephemeral private browsing window. No history, cookies, or cache are persisted to disk.
+.TP
+.BI \-\-new\-tab " URL"
+Open the specified URL in a new tab within the current or a new window.
+.TP
+.BI \-\-profile\-dir " PATH"
+Run the browser using an isolated profile directory. The path must be absolute, non-world-writable, and is created with mode 0700.
+.SH FILES
+.TP
+.I ~/.config/shadhin-browser/config.toml
+Main user configuration file (permissions 0600).
+.TP
+.I ~/.local/share/shadhin-browser/shadhin.db
+SQLite database storing bookmarks, history, shortcuts, and workspaces (permissions 0600).
+.TP
+.I ~/.local/share/shadhin-browser/sessions/
+Directory holding per-workspace WebKit network sessions and cookie jars (permissions 0700).
+.SH AUTHORS
+Written by the Shadhin Browser Contributors.
+.SH COPYRIGHT
+Copyright \(co 2026 Shadhin Browser Contributors.
+License: GNU General Public License version 3 or later <https://gnu.org/licenses/gpl.html>.

@@ -1,0 +1,8 @@
+shadhin-browser (0.1.0-1) noble; urgency=medium
+
+  * Initial release for Ubuntu 24.04 (noble).
+  * WebKitGTK 6.0 engine integration with bubblewrap sandboxing.
+  * Native GTK4 and Libadwaita glassmorphism interface.
+  * Privacy shield, tracker blocking, and isolated workspaces.
+
+ -- Shadhin Browser Contributors <placeholder@example.com>  Tue, 03 Nov 2026 11:30:00 +0600

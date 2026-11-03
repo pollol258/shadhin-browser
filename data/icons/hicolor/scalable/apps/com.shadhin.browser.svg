@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="shadhin-grad-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff3366" />
+      <stop offset="50%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#fb923c" />
+    </linearGradient>
+    <linearGradient id="shadhin-grad-secondary" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#be123c" />
+      <stop offset="60%" stop-color="#e11d48" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+    <filter id="soft-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#f43f5e" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <!-- Modern Geometric Soaring Freedom Wings -->
+  <g filter="url(#soft-glow)">
+    <!-- Lower wing / ribbon -->
+    <path d="M 22 96 C 42 96, 68 84, 86 64 C 70 68, 52 70, 36 68 C 48 60, 64 48, 78 36 C 62 40, 48 42, 34 38 C 50 30, 74 18, 98 22 C 108 24, 114 30, 112 40 C 108 58, 88 88, 62 104 C 44 114, 28 108, 22 96 Z"
+          fill="url(#shadhin-grad-secondary)" opacity="0.92" />
+    <!-- Upper soaring wing / crown -->
+    <path d="M 38 82 C 58 78, 82 62, 98 42 C 84 46, 70 46, 56 42 C 72 32, 92 18, 110 14 C 114 13, 118 16, 117 21 C 114 36, 96 66, 74 84 C 56 98, 44 92, 38 82 Z"
+          fill="url(#shadhin-grad-primary)" />
+    <!-- Freedom accent bead / spark -->
+    <circle cx="114" cy="18" r="4" fill="#fde047" opacity="0.9" />
+  </g>
+</svg>

@@ -1,0 +1,29 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: shadhin-browser
+Upstream-Contact: Shadhin Browser Contributors <placeholder@example.com>
+Source: https://github.com/placeholder-user/shadhin-browser
+
+Files: *
+Copyright: 2026 Shadhin Browser Contributors
+License: GPL-3.0-or-later
+
+Files: resources/filters/*
+Copyright: 2005-2026 EasyList Authors (https://easylist.to/)
+License: GPL-3.0 or CC-BY-SA-3.0
+
+Files: data/com.shadhin.browser.metainfo.xml
+Copyright: 2026 Shadhin Browser Contributors
+License: CC0-1.0
+
+License: GPL-3.0-or-later
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ On Debian and Ubuntu systems, the full text of the GNU General Public License
+ version 3 can be found in `/usr/share/common-licenses/GPL-3'.
+
+License: CC0-1.0
+ To the extent possible under law, the author(s) have dedicated all copyright
+ and related and neighboring rights to this document to the public domain worldwide.
