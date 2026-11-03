@@ -287,16 +287,15 @@ menubutton.shadhin-nav-btn > button:disabled {
 /* --- Compact Sidebar Mode (~56px Rail) --- */
 .shadhin-sidebar.compact {
   min-width: 56px;
-  max-width: 56px;
   padding: 12px 4px;
 }
 
 .shadhin-sidebar.compact .shadhin-sidebar-label {
-  display: none;
+  opacity: 0;
 }
 
 .shadhin-sidebar.compact .shadhin-sidebar-section-title {
-  display: none;
+  opacity: 0;
 }
 
 .shadhin-sidebar.compact .shadhin-sidebar-separator {
@@ -305,8 +304,7 @@ menubutton.shadhin-nav-btn > button:disabled {
 
 .shadhin-sidebar.compact .shadhin-sidebar-item {
   padding: 8px 0;
-  justify-content: center;
-  margin: 2px auto;
+  margin: 2px 4px;
   min-width: 44px;
   min-height: 36px;
 }

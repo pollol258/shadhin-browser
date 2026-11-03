@@ -334,6 +334,12 @@ impl SettingsWindow {
             let active = sw.is_active();
             cfg_dark.borrow_mut().force_dark_theme = active;
             let _ = cfg_dark.borrow().save();
+            let style_manager = adw::StyleManager::default();
+            if active {
+                style_manager.set_color_scheme(adw::ColorScheme::ForceDark);
+            } else {
+                style_manager.set_color_scheme(adw::ColorScheme::ForceLight);
+            }
         });
         theme_group.add(&dark_switch);
 
