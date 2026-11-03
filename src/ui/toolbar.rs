@@ -2,6 +2,7 @@
 
 use crate::ui::addressbar::AddressBar;
 use crate::ui::privacy_panel::PrivacyPopover;
+use gtk4::glib;
 use gtk4::prelude::*;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -14,6 +15,7 @@ pub struct ShadhinToolbar {
     reload_icon: gtk4::Image,
     sidebar_toggle_btn: gtk4::Button,
     shield_btn: gtk4::Button,
+    menu_btn: gtk4::MenuButton,
     address_bar: Rc<AddressBar>,
     privacy_popover: Rc<PrivacyPopover>,
     is_loading: Rc<RefCell<bool>>,
@@ -95,15 +97,12 @@ impl ShadhinToolbar {
         });
         container.append(&profile_btn);
 
-        let menu_icon = gtk4::Image::from_icon_name("open-menu-symbolic");
-        let menu_btn = gtk4::Button::builder()
-            .child(&menu_icon)
+        let menu_btn = gtk4::MenuButton::builder()
+            .icon_name("open-menu-symbolic")
             .tooltip_text("Main Menu")
-            .css_classes(["shadhin-nav-btn"])
+            .css_classes(["shadhin-nav-btn", "flat"])
+            .always_show_arrow(false)
             .build();
-        menu_btn.connect_clicked(|_| {
-            tracing::info!("Main Menu clicked (DEV-ONLY)");
-        });
         container.append(&menu_btn);
 
         let is_loading = Rc::new(RefCell::new(false));
@@ -116,6 +115,7 @@ impl ShadhinToolbar {
             reload_icon,
             sidebar_toggle_btn,
             shield_btn,
+            menu_btn,
             address_bar,
             privacy_popover,
             is_loading,
@@ -189,6 +189,16 @@ impl ShadhinToolbar {
     /// Accessor to the shield button
     pub fn shield_button(&self) -> &gtk4::Button {
         &self.shield_btn
+    }
+
+    /// Accessor to the main menu button
+    pub fn menu_button(&self) -> &gtk4::MenuButton {
+        &self.menu_btn
+    }
+
+    /// Sets the menu model for the main menu button
+    pub fn set_menu_model<M: glib::object::IsA<gtk4::gio::MenuModel>>(&self, model: &M) {
+        self.menu_btn.set_menu_model(Some(model));
     }
 }
 

@@ -170,7 +170,8 @@
   font-style: italic;
 }
 
-.shadhin-nav-btn {
+.shadhin-nav-btn,
+menubutton.shadhin-nav-btn > button {
   border-radius: 8px;
   padding: 6px 8px;
   background: transparent;
@@ -178,12 +179,14 @@
   transition: all 150ms ease;
 }
 
-.shadhin-nav-btn:hover {
+.shadhin-nav-btn:hover,
+menubutton.shadhin-nav-btn > button:hover {
   background: rgba(255, 255, 255, 0.16);
   color: #ffffff;
 }
 
-.shadhin-nav-btn:disabled {
+.shadhin-nav-btn:disabled,
+menubutton.shadhin-nav-btn > button:disabled {
   opacity: 0.35;
 }
 
